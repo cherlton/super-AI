@@ -1,0 +1,34 @@
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: superai_db
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s    # Check every 10 seconds
+      timeout: 10s     # Give the command 10 seconds to respond
+      retries: 15      # Try 15 times before giving up
+      start_period: 30s # Give it 30 seconds of "grace time" before checking
+
+  backend:
+    build: ./backend
+    ports:
+      - "5001:5001"
+    environment:
+      # Keep 'db' here because inside the Docker network, it's still 3306
+      - DATABASE_URL=mysql+pymysql://root:root_password@db/superai_db
+      - FLASK_PORT=5001
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+     build: ./frontend
+     ports:
+       - "5174:80"  # Access your site at localhost:5173
+     depends_on:
+       - backend

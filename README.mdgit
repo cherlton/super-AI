@@ -1,0 +1,1 @@
+"# super-AI"  initgit add README.mdgit commit -m "first commit"git branch -M maingit remote add origin https://github.com/cherlton/super-AI.gitgit push -u origin main
