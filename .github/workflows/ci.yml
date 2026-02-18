@@ -35,11 +35,10 @@ jobs:
           python-version: '3.11'
 
       - name: Install Backend Dependencies
+        working-directory: ./backend  # This is the "Magic Fix"
         run: |
-          cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          # We manually install pymysql just in case it's not in requirements yet
           pip install pymysql
 
       - name: Run Backend Lint/Tests
