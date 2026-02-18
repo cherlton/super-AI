@@ -1,0 +1,1 @@
+# Competitor API package
